@@ -13,16 +13,17 @@ import pandas as pd
 print(pd.__version__)
 
 a = [1,2,3]
+print(a)
 var = pd.Series(a)
 print(var)
 
-print(var[0])
+print(var[2])
 
 a = [1,2,3]
 var = pd.Series(a,index = ["x","y","z"])
 print(var)
 
-print(var["z"])
+print(var["y"])
 
 calories = {"day1":420.3,"day2":360,"day3":350.3}
 
@@ -53,14 +54,16 @@ df = pd.DataFrame(data,index = ["x","y","z"])
 
 print(df)
 
-print(df.loc["y"])
+print(df.loc["y","calories"])
+
+print(df.iloc[0,1])
 
 df = pd.read_csv('/content/data.csv')
 print(df.to_string())
 
 print(df)
 
-df.head()
+df.head(3)
 
 df.tail()
 
@@ -76,6 +79,9 @@ print(df.head())
 file_path = '/content/Data of Wrong .csv'
 df = pd.read_csv(file_path,sep =",")
 print(df.head())
+
+xl = pd.read_csv('/content/price.csv',sep = ";")
+print(xl.head())
 
 print(df.to_string())
 
@@ -107,3 +113,81 @@ print(df3.to_string())
 df3["Calories"].fillna(130,inplace = True)
 print(df3.to_string())
 
+#Replace Using Mean, Median, or Mode
+df4 = df.copy()
+
+print(df4.to_string())
+
+x = df4["Calories"].mean()
+
+print(x)
+
+df4["Calories"].fillna(x,inplace = True )
+print(df4.to_string())
+
+df5 = df.copy()
+x = df5["Calories"].median()
+
+print(x)
+
+df5["Calories"].fillna(x,inplace = True )
+print(df5.to_string())
+
+df6= df.copy()
+x = df5["Calories"].mode() [0]
+
+print(x)
+
+df6["Calories"].fillna(x,inplace = True )
+print(df6.to_string())
+
+#Wrong Format
+df6["Date"] = pd.to_datetime(df6['Date'])
+print(df6.to_string())
+
+df6.info()
+
+df6.dropna(subset=['Date'],inplace =True)
+print(df6.to_string())
+
+#Wrong Data
+df6.loc[7,"Duration"] = 45
+print(df6.to_string())
+
+df7 = df.copy()
+print(df7.to_string())
+
+for x in df7.index:
+  if df7.loc[x,'Duration'] >120:
+    df7.loc[x,'Duration']= 120#df7.drop(x,inplace= True)
+print(df7.to_string())
+
+print(df7.loc[0,'Date'])
+
+print(df7.iloc[0,1])
+
+print(df6.duplicated())
+
+print(df6.to_string())
+
+df6.drop_duplicates(inplace =True)
+
+print(df6.to_string())
+
+df6.to_csv("clanedfiles.csv",header = False)
+
+df10 = pd.read_csv('/content/clanedfiles.csv')
+print(df10)
+
+"""#Data Correlations
+
+1 means that there is a 1 to 1 relationship (a perfect correlation), and for this data set, each time a value went up in the first column, the other one went up as well.
+
+0.9 is also a good relationship, and if you increase one value, the other will probably increase as well.
+
+-0.9 would be just as good relationship as 0.9, but if you increase one value, the other will probably go down.
+
+0.2 means NOT a good relationship, meaning that if one value goes up does not mean that the other will.
+"""
+
+df6.corr()
